@@ -1,44 +1,44 @@
-<?php 
-session_start();
-include 'fungsi.php';
-if (isset($_GET['logout'])) { session_destroy(); header("Location: index.php"); exit; }
-if (isset($_POST['login'])) { $_SESSION['nama'] = $_POST['nama']; header("Location: index.php"); exit; }
-?>
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zodiak App</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZODIAK APP</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:#ffe6f0;min-height:100vh;padding:20px;display:flex;justify-content:center}
+.container{width:100%;max-width:400px}
+.header{background:#ff69b4;color:white;text-align:center;padding:20px;border-radius:15px;margin-bottom:20px;font-weight:bold;font-size:20px}
+.card{background:white;padding:15px;border-radius:15px;margin-bottom:15px;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+label{font-weight:bold;display:block;margin-bottom:8px;font-size:14px}
+input,select{width:100%;padding:12px;border:2px solid #ffd6e7;border-radius:10px;margin-bottom:10px;outline:none}
+.btn{width:100%;background:#ff69b4;color:white;border:none;padding:12px;border-radius:10px;font-weight:bold;cursor:pointer;margin-bottom:10px}
+.halo-box{background:#ff69b4;color:white;text-align:center;padding:20px;border-radius:15px;margin-bottom:15px}
+.result{background:white;padding:15px;border-radius:15px}
+.hidden{display:none}
+</style>
 </head>
 <body>
-<div class="app">
-
-<?php if (!isset($_SESSION['nama'])) { ?>
-    <div class="header"><h2>🔮 ZODIAK APP 🔮</h2><p>Login dulu bestie</p></div>
-    <form method="post">
-        <h3>Masukin Nama Lo:</h3>
-        <input type="text" name="nama" placeholder="Contoh: Alya" required>
-        <button type="submit" name="login">Masuk ke App</button>
-    </form>
-<?php } else { ?>
-    <div class="header">
-        <h3>Halo, <?php echo $_SESSION['nama']; ?>! ✨</h3>
-        <a href="?logout=1" style="color:white; font-size:12px;">Logout</a>
-    </div>
-    <form method="post">
-        <h3>Cek Zodiak Lo:</h3>
-        <input type="date" name="tgl" required>
-        <button type="submit" name="cek">Cek Sekarang</button>
-    </form>
-    <?php
-    if (isset($_POST['cek'])) {
-        $hasil = cekZodiak($_POST['tgl']);
-        echo "<div class='hasil'><h2>$hasil</h2><p>Hai ".$_SESSION['nama'].", ramalan cinta lo: bakal ada yang chat duluan! 😳</p></div>";
-    }
-    ?>
-<?php } ?>
-
+<div class="container">
+<div class="header">🔮 ZODIAK APP 🔮<div style="font-size:12px;font-weight:normal;margin-top:5px">Login dulu bestie</div></div>
+<div id="loginSection" class="card">
+<label>Masukin Nama Lo:</label>
+<input type="text" id="namaInput" placeholder="Contoh: Alya">
+<button class="btn" onclick="login()">Masuk ke App</button>
 </div>
+<div id="appSection" class="hidden">
+<div class="halo-box"><div id="haloText">Halo, ! ✨</div><a onclick="logout()" style="color:white;font-size:12px;text-decoration:underline;cursor:pointer">Logout</a></div>
+<div class="card"><label>Cek Zodiak Lo:</label>
+<select id="zodiakSelect"><option value="">Pilih zodiak...</option><option>Aries</option><option>Taurus</option><option>Gemini</option><option>Cancer</option><option>Leo</option><option>Virgo</option><option>Libra</option><option>Scorpio</option><option>Sagittarius</option><option>Capricorn</option><option>Aquarius</option><option>Pisces</option></select>
+<button class="btn" onclick="cekZodiak()">Cek Sekarang</button></div>
+<div class="result"><h3>$hasil</h3><p id="hasilText">Pilih zodiak dulu bestie...</p></div>
+</div></div>
+<script>
+const ramalan={"Aries":"bakal ada yang chat duluan! Jangan jual mahal ya 🥺","Taurus":"uang jajan bakal nambah, tapi jangan boros!","Gemini":"mood lo lagi naik turun kayak roller coaster","Cancer":"ada yang kangenin lo diam-diam, cek DM deh 👀","Leo":"hari ini lo bakal jadi pusat perhatian, slay!","Virgo":"jangan overthinking terus","Libra":"keputusan besar bakal dateng","Scorpio":"misterius banget sih lo hari ini","Sagittarius":"petualangan baru nungguin lo!","Capricorn":"kerja keras lo bakal keliatan hasilnya","Aquarius":"ide gila lo bakal jadi kenyataan!","Pisces":"hari ini cocok buat rebahan"};
+function checkLogin(){const n=localStorage.getItem('namaZodiak');if(n){loginSection.classList.add('hidden');appSection.classList.remove('hidden');haloText.innerText=`Halo, ${n}! ✨`}else{loginSection.classList.remove('hidden');appSection.classList.add('hidden')}}
+function login(){const n=namaInput.value.trim();if(!n)return alert('Isi nama dulu bestie!');localStorage.setItem('namaZodiak',n);checkLogin()}
+function logout(){localStorage.removeItem('namaZodiak');namaInput.value='';hasilText.innerText='Pilih zodiak dulu bestie...';zodiakSelect.value='';checkLogin()}
+function cekZodiak(){const z=zodiakSelect.value;const n=localStorage.getItem('namaZodiak');if(!z)return alert('Pilih zodiak dulu!');hasilText.innerText=`Hai ${n}, ramalan cinta lo: ${ramalan[z]}`;}
+checkLogin();
+</script>
 </body>
 </html>
