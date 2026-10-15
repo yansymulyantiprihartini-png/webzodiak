@@ -1,1 +1,16 @@
-
+{
+  "name": "Web Zodiak",
+  "short_name": "Zodiak",
+  "description": "Cek zodiak harian kayak app",
+  "start_url": "/webzodiak/",
+  "display": "standalone",
+  "background_color": "#0f0f0f",
+  "theme_color": "#7c3aed",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/47/47197.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
